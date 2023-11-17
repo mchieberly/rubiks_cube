@@ -1,5 +1,9 @@
 # Malachi Eberly
 # cube.py
+# 3D render link:
+# https://github.com/davidwhogg/MagicCube/tree/master
+
+import random
 
 class Piece:
     def __init__(self, piece_type, colors):
@@ -21,21 +25,21 @@ class Cube:
 
     def initialize_piece(self, x, y, z):
         colors = []
-        if x == 0: colors.append(self.colors['L'])
-        elif x == 2: colors.append(self.colors['R'])
-        if y == 0: colors.append(self.colors['U'])
-        elif y == 2: colors.append(self.colors['D'])
-        if z == 0: colors.append(self.colors['F'])
-        elif z == 2: colors.append(self.colors['B'])
+        if x == 0: colors.append(self.colors['L'])  # Left face
+        if x == 2: colors.append(self.colors['R'])  # Right face
+        if y == 0: colors.append(self.colors['U'])  # Top face
+        if y == 2: colors.append(self.colors['D'])  # Bottom face
+        if z == 0: colors.append(self.colors['F'])  # Front face
+        if z == 2: colors.append(self.colors['B'])  # Back face
 
         piece_type = 'center' if len(colors) == 1 else 'edge' if len(colors) == 2 else 'corner'
         return Piece(piece_type, tuple(colors))
-    
+
     def rotate_matrix_clockwise(self, matrix):
         return [list(reversed(col)) for col in zip(*matrix)]
 
     def rotate_matrix_counterclockwise(self, matrix):
-        return [list(col) for col in reversed(zip(*matrix))]
+        return [list(col) for col in reversed(list(zip(*matrix)))]
 
     # =================================================================
 
@@ -183,43 +187,43 @@ class Cube:
 
     def rotate_left_clockwise(self):
         # Rotate the left face itself
-        left_face = [row[2] for row in self.cube]
+        left_face = [row[0] for row in self.cube]
         rotated_left = self.rotate_matrix_clockwise(left_face)
         for i in range(3):
             for j in range(3):
-                self.cube[i][j][2] = rotated_left[i][j]
+                self.cube[i][j][0] = rotated_left[i][j]
 
         # Rotate the adjacent edges
-        top_edge = [self.cube[0][i][2] for i in range(3)]
-        front_edge = [self.cube[i][2][0] for i in range(3)]
-        bottom_edge = [self.cube[2][i][2] for i in range(3)]
+        top_edge = [self.cube[0][i][0] for i in range(3)]
         back_edge = [self.cube[i][2][2] for i in range(3)]
+        bottom_edge = [self.cube[2][2 - i][0] for i in range(3)]
+        front_edge = [self.cube[i][0][0] for i in range(3)]
 
         for i in range(3):
-            self.cube[i][2][0] = top_edge[i]  # Top to front
-            self.cube[2][2 - i][2] = front_edge[i]  # Front to bottom
-            self.cube[i][2][2] = bottom_edge[2 - i]  # Bottom to back
-            self.cube[0][i][2] = back_edge[i]  # Back to top
+            self.cube[i][2][2] = top_edge[i]  # Top to back
+            self.cube[2][2 - i][0] = back_edge[i]  # Back to bottom
+            self.cube[i][0][0] = bottom_edge[2 - i]  # Bottom to front
+            self.cube[0][i][0] = front_edge[i]  # Front to top
 
     def rotate_left_counterclockwise(self):
-        # Rotate the right face itself
-        right_face = [row[2] for row in self.cube]
-        rotated_right = self.rotate_matrix_counterclockwise(right_face)
+        # Rotate the left face itself
+        left_face = [row[0] for row in self.cube]
+        rotated_left = self.rotate_matrix_counterclockwise(left_face)
         for i in range(3):
             for j in range(3):
-                self.cube[i][j][2] = rotated_right[i][j]
+                self.cube[i][j][0] = rotated_left[i][j]
 
         # Rotate the adjacent edges
-        top_edge = [self.cube[0][i][2] for i in range(3)]
+        top_edge = [self.cube[0][i][0] for i in range(3)]
+        front_edge = [self.cube[i][0][0] for i in range(3)]
+        bottom_edge = [self.cube[2][2 - i][0] for i in range(3)]
         back_edge = [self.cube[i][2][2] for i in range(3)]
-        bottom_edge = [self.cube[2][i][2] for i in range(3)]
-        front_edge = [self.cube[i][2][0] for i in range(3)]
 
         for i in range(3):
-            self.cube[i][2][2] = top_edge[2 - i]  # Top to back
-            self.cube[2][i][2] = back_edge[i]  # Back to bottom
-            self.cube[i][2][0] = bottom_edge[2 - i]  # Bottom to front
-            self.cube[0][2 - i][2] = front_edge[i]  # Front to top
+            self.cube[i][0][0] = top_edge[2 - i]  # Top to front
+            self.cube[2][2 - i][0] = front_edge[i]  # Front to bottom
+            self.cube[i][2][2] = bottom_edge[i]  # Bottom to back
+            self.cube[0][i][0] = back_edge[i]  # Back to top
 
     def rotate_top_clockwise(self):
         # Rotate the top face itself
@@ -296,13 +300,55 @@ class Cube:
     # =================================================================
 
     def is_solved(self):
-        # Check if the cube is solved
-        pass
+        # Check if each face is of a uniform color
+        for face in self.get_faces():
+            if not self.is_face_uniform(face):
+                return False
+        return True
 
-    def scramble(self):
-        # Scramble the cube
-        pass
+    def get_faces(self):
+        # Extract the 6 faces of the cube
+        faces = []
+        faces.append([self.cube[i][j][0] for i in range(3) for j in range(3)])  # Front face
+        faces.append([self.cube[i][j][2] for i in range(3) for j in range(3)])  # Back face
+        faces.append([self.cube[0][i][j] for i in range(3) for j in range(3)])  # Top face
+        faces.append([self.cube[2][i][j] for i in range(3) for j in range(3)])  # Bottom face
+        faces.append([self.cube[i][0][j] for i in range(3) for j in range(3)])  # Left face
+        faces.append([self.cube[i][2][j] for i in range(3) for j in range(3)])  # Right face
+        return faces
+
+    def is_face_uniform(self, face):
+        # Check if all pieces on the face have the same color
+        # Assuming the first color of each piece represents the color of the face
+        face_color = face[0].colors[0]
+        return all(piece.colors[0] == face_color for piece in face)
+
+    def scramble(self, moves=25):
+        rotations = {
+            'front': [self.rotate_front_clockwise, self.rotate_front_counterclockwise],
+            'right': [self.rotate_right_clockwise, self.rotate_right_counterclockwise],
+            'left': [self.rotate_left_clockwise, self.rotate_left_counterclockwise],
+            'back': [self.rotate_back_clockwise, self.rotate_back_counterclockwise],
+            'top': [self.rotate_top_clockwise, self.rotate_top_counterclockwise],
+            'bottom': [self.rotate_bottom_clockwise, self.rotate_bottom_counterclockwise]
+        }
+
+        for _ in range(moves):
+            face = random.choice(list(rotations.keys()))
+            rotation = random.choice(rotations[face])
+            rotation()
+
+        print(f"Scrambled Cube with {moves} moves")
 
     def __str__(self):
-        # Return a string representation of the cube's current state
-        pass
+        def format_face(face):
+            face_str = ""
+            for i in range(3):
+                face_str += ' '.join(piece.colors[0] for piece in face[i*3:(i+1)*3]) + "\n"
+            return face_str
+
+        faces = self.get_faces()
+        cube_str = ""
+        for face_name, face in zip(['Front', 'Right', 'Back', 'Left', 'Top', 'Bottom'], faces):
+            cube_str += f"{face_name} face:\n{format_face(face)}\n"
+        return cube_str
