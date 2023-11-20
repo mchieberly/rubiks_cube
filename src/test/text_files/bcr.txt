@@ -1,0 +1,29 @@
+Front face:
+   green   green   green
+   green   green   green
+   green   green   green
+
+Back face:
+    blue    blue    blue
+    blue    blue    blue
+    blue    blue    blue
+
+Top face:
+     red     red     red
+   white   white   white
+   white   white   white
+
+Bottom face:
+  yellow  yellow  yellow
+  yellow  yellow  yellow
+  orange  orange  orange
+
+Left face:
+   white  orange  orange
+   white  orange  orange
+   white  orange  orange
+
+Right face:
+     red     red  yellow
+     red     red  yellow
+     red     red  yellow
