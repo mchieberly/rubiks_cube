@@ -1,8 +1,10 @@
 # Malachi Eberly
 # cube.py
 
-import random
 import numpy as np
+import gymnasium as gym
+from gymnasium import spaces
+import random
 
 class Cube:
     def __init__(self):
@@ -20,7 +22,7 @@ class Cube:
                     [[3, 3, 3], [3, 3, 3], [3, 3, 3]],
                     [[4, 4, 4], [4, 4, 4], [4, 4, 4]],
                     [[5, 5, 5], [5, 5, 5], [5, 5, 5]]]
-        
+                                
     # =================================================================
 
     # Rotation methods
@@ -206,3 +208,84 @@ class Cube:
                 cube_str += "\n"
 
         return cube_str
+
+    ###########################################################################
+
+    # RL Methods
+
+    def get_observation(self):
+        # Return the flattened state of the cube
+        return np.array(self.cube).flatten()
+
+    def step(self, action):
+        # Perform the action (rotation)
+        self.perform_rotation(action)
+
+        # Check to see if we terminate
+        terminated = False
+
+        # Check if the cube is solved
+        truncated = self.is_solved()
+
+        # Define the reward
+        # TODO: Implement reward method for steps to solve
+        reward = 100 if truncated else -1
+
+        # Return observation, reward, and done status
+        return self.get_observation(), reward, terminated, truncated
+
+    def reset(self):
+        # Scramble the cube
+        self.scramble()
+        return self.get_observation()
+    
+    def perform_rotation(self, action):
+        # Define the mapping from action number to cube rotation
+        actions = {
+            0: self.rotate_front_clockwise,
+            1: self.rotate_front_counterclockwise,
+            2: self.rotate_back_clockwise,
+            3: self.rotate_back_counterclockwise,
+            4: self.rotate_top_clockwise,
+            5: self.rotate_top_counterclockwise,
+            6: self.rotate_bottom_clockwise,
+            7: self.rotate_bottom_counterclockwise,
+            8: self.rotate_left_clockwise,
+            9: self.rotate_left_counterclockwise,
+            10: self.rotate_right_clockwise,
+            11: self.rotate_right_counterclockwise
+        }
+
+        # Execute the rotation method corresponding to the action
+        rotation_method = actions.get(action)
+        if rotation_method:
+            rotation_method()
+        else:
+            raise ValueError("Invalid action!")
+    
+class CubeEnv(gym.Env):
+    metadata = {"render_modes": ["human"], "render_fps": 4}
+
+    def __init__(self):
+        self.cube = Cube()
+        self.action_space = spaces.Discrete(12)
+        self.observation_space = spaces.Box(low=0, high=5, shape=(54,), dtype=np.int64)
+
+    def _get_obs(self):
+        return np.array(self.cube.get_observation())
+
+    def _get_info(self):
+        # This method can provide additional info, e.g., number of correct positions
+        return {}
+
+    def step(self, action):
+        obs, reward, terminated, truncated, _ = self.cube.step(action)
+        return obs, reward, terminated, truncated, self._get_info()
+
+    def reset(self, seed=None, options=None):
+        super().reset(seed=seed)  # If using any RNG, ensure it's seeded correctly
+        return self.cube.reset()
+
+    def render(self, mode='human'):
+        if mode == 'human':
+            print(self.cube)
