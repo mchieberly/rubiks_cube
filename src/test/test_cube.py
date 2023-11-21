@@ -37,7 +37,45 @@ class TestCubeRotations(unittest.TestCase):
         self.assertEqual(str(self.cube), cube_string)
         file.close()
 
-    # ... tests for other rotations ...
+    def test_top_clockwise_rotation(self):
+        self.cube.rotate_top_clockwise()
+        file = open("src/test/text_files/tcr.txt", 'r')
+        cube_string = file.read()
+        self.assertEqual(str(self.cube), cube_string)
+        file.close()
+
+    def test_top_counterclockwise_rotation(self):
+        self.cube.rotate_top_counterclockwise()
+        file = open("src/test/text_files/tccr.txt", 'r')
+        cube_string = file.read()
+        self.assertEqual(str(self.cube), cube_string)
+        file.close()
+
+    def test_bottom_clockwise_rotation(self):
+        self.cube.rotate_bottom_clockwise()
+        file = open("src/test/text_files/dcr.txt", 'r')
+        cube_string = file.read()
+        self.assertEqual(str(self.cube), cube_string)
+        file.close()
+
+    def test_bottom_counterclockwise_rotation(self):
+        self.cube.rotate_bottom_counterclockwise()
+        file = open("src/test/text_files/dccr.txt", 'r')
+        cube_string = file.read()
+        self.assertEqual(str(self.cube), cube_string)
+        file.close()
+
+    def test_left_clockwise_rotation(self):
+        pass
+
+    def test_left_counterclockwise_rotation(self):
+        pass
+
+    def test_right_clockwise_rotation(self):
+        pass
+
+    def test_right_counterclockwise_rotation(self):
+        pass
 
 class TestCubeScramble(unittest.TestCase):
     def setUp(self):

@@ -72,11 +72,37 @@ class Cube:
         self.cube[1][0][1], self.cube[1][1][2], self.cube[1][2][1], self.cube[1][1][0] = \
         self.cube[1][1][2], self.cube[1][2][1], self.cube[1][1][0], self.cube[1][0][1]
 
-    def rotate_right_clockwise(self):
-        pass
-    
-    def rotate_right_counterclockwise(self):
-        pass
+    def rotate_top_clockwise(self):
+        self.cube[1][0], self.cube[5][0], self.cube[0][0], self.cube[4][0] = \
+        self.cube[4][0], self.cube[1][0], self.cube[5][0], self.cube[0][0]
+        self.cube[2][0][0], self.cube[2][0][2], self.cube[2][2][2], self.cube[2][2][0] = \
+        self.cube[2][2][0], self.cube[2][0][0], self.cube[2][0][2], self.cube[2][2][2]
+        self.cube[2][0][1], self.cube[2][1][2], self.cube[2][2][1], self.cube[2][1][0] = \
+        self.cube[2][1][0], self.cube[2][0][1], self.cube[2][1][2], self.cube[2][2][1]
+
+    def rotate_top_counterclockwise(self):
+        self.cube[1][0], self.cube[5][0], self.cube[0][0], self.cube[4][0] = \
+        self.cube[5][0], self.cube[0][0], self.cube[4][0], self.cube[1][0]
+        self.cube[2][0][0], self.cube[2][0][2], self.cube[2][2][2], self.cube[2][2][0] = \
+        self.cube[2][0][2], self.cube[2][2][2], self.cube[2][2][0], self.cube[2][0][0]
+        self.cube[2][0][1], self.cube[2][1][2], self.cube[2][2][1], self.cube[2][1][0] = \
+        self.cube[2][1][2], self.cube[2][2][1], self.cube[2][1][0], self.cube[2][0][1] 
+
+    def rotate_bottom_clockwise(self):
+        self.cube[0][2], self.cube[5][2], self.cube[1][2], self.cube[4][2] = \
+        self.cube[4][2], self.cube[0][2], self.cube[5][2], self.cube[1][2]
+        self.cube[3][0][0], self.cube[3][0][2], self.cube[3][2][2], self.cube[3][2][0] = \
+        self.cube[3][2][0], self.cube[3][0][0], self.cube[3][0][2], self.cube[3][2][2]
+        self.cube[3][0][1], self.cube[3][1][2], self.cube[3][2][1], self.cube[3][1][0] = \
+        self.cube[3][1][0], self.cube[3][0][1], self.cube[3][1][2], self.cube[3][2][1] 
+
+    def rotate_bottom_counterclockwise(self):
+        self.cube[0][2], self.cube[5][2], self.cube[1][2], self.cube[4][2] = \
+        self.cube[5][2], self.cube[1][2], self.cube[4][2], self.cube[0][2]
+        self.cube[3][0][0], self.cube[3][0][2], self.cube[3][2][2], self.cube[3][2][0] = \
+        self.cube[3][0][2], self.cube[3][2][2], self.cube[3][2][0], self.cube[3][0][0]
+        self.cube[3][0][1], self.cube[3][1][2], self.cube[3][2][1], self.cube[3][1][0] = \
+        self.cube[3][1][2], self.cube[3][2][1], self.cube[3][1][0], self.cube[3][0][1] 
 
     def rotate_left_clockwise(self):
         pass
@@ -84,16 +110,10 @@ class Cube:
     def rotate_left_counterclockwise(self):
         pass
 
-    def rotate_top_clockwise(self):
+    def rotate_right_clockwise(self):
         pass
-
-    def rotate_top_counterclockwise(self):
-        pass
-
-    def rotate_bottom_clockwise(self):
-        pass
-
-    def rotate_bottom_counterclockwise(self):
+    
+    def rotate_right_counterclockwise(self):
         pass
 
     # =================================================================
