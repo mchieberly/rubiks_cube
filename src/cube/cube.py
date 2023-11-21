@@ -2,6 +2,7 @@
 # cube.py
 
 import random
+import numpy as np
 
 class Cube:
     def __init__(self):
