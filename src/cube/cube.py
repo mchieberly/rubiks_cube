@@ -27,7 +27,9 @@ class Cube:
     def rotate_front_clockwise(self):
         row1, row2, row3, row4 = self.cube[2][2], [row[0] for row in self.cube[5]], \
             self.cube[3][0], [row[2] for row in self.cube[4]]
+        row2.reverse()
         self.cube[2][2], self.cube[3][0] = row4, row2
+        row4.reverse()
         for i in range(3):
             self.cube[5][i][0] = row1[i]
             self.cube[4][i][2] = row3[i]
@@ -40,6 +42,8 @@ class Cube:
         row1, row2, row3, row4 = self.cube[2][2], [row[0] for row in self.cube[5]], \
             self.cube[3][0], [row[2] for row in self.cube[4]]
         self.cube[2][2], self.cube[3][0] = row2, row4
+        row1.reverse()
+        row3.reverse()
         for i in range(3):
             self.cube[5][i][0] = row3[i]
             self.cube[4][i][2] = row1[i]
@@ -52,6 +56,8 @@ class Cube:
         row1, row2, row3, row4 = self.cube[2][0], [row[2] for row in self.cube[5]], \
             self.cube[3][2], [row[0] for row in self.cube[4]]
         self.cube[2][0], self.cube[3][2] = row2, row4
+        row1.reverse()
+        row3.reverse()
         for i in range(3):
             self.cube[5][i][2] = row3[i]
             self.cube[4][i][0] = row1[i]
@@ -63,6 +69,8 @@ class Cube:
     def rotate_back_counterclockwise(self):
         row1, row2, row3, row4 = self.cube[2][0], [row[2] for row in self.cube[5]], \
             self.cube[3][2], [row[0] for row in self.cube[4]]
+        row2.reverse()
+        row4.reverse()
         self.cube[2][0], self.cube[3][2] = row4, row2
         for i in range(3):
             self.cube[5][i][2] = row1[i]
@@ -105,16 +113,64 @@ class Cube:
         self.cube[3][1][2], self.cube[3][2][1], self.cube[3][1][0], self.cube[3][0][1] 
 
     def rotate_left_clockwise(self):
-        pass
+        row1, row2, row3, row4 = [row[0] for row in self.cube[2]], [row[0] for row in self.cube[0]], \
+            [row[0] for row in self.cube[3]], [row[2] for row in self.cube[1]]
+        row3.reverse()
+        row4.reverse()
+        for i in range(3):
+            self.cube[2][i][0] = row4[i]
+            self.cube[0][i][0] = row1[i]
+            self.cube[3][i][0] = row2[i]
+            self.cube[1][i][2] = row3[i]
+        self.cube[4][0][0], self.cube[4][0][2], self.cube[4][2][2], self.cube[4][2][0] = \
+        self.cube[4][2][0], self.cube[4][0][0], self.cube[4][0][2], self.cube[4][2][2]
+        self.cube[4][0][1], self.cube[4][1][2], self.cube[4][2][1], self.cube[4][1][0] = \
+        self.cube[4][1][0], self.cube[4][0][1], self.cube[4][1][2], self.cube[4][2][1] 
 
     def rotate_left_counterclockwise(self):
-        pass
+        row1, row2, row3, row4 = [row[0] for row in self.cube[2]], [row[0] for row in self.cube[0]], \
+            [row[0] for row in self.cube[3]], [row[2] for row in self.cube[1]]
+        row1.reverse()
+        row4.reverse()
+        for i in range(3):
+            self.cube[2][i][0] = row2[i]
+            self.cube[0][i][0] = row3[i]
+            self.cube[3][i][0] = row4[i]
+            self.cube[1][i][2] = row1[i]
+        self.cube[4][0][0], self.cube[4][0][2], self.cube[4][2][2], self.cube[4][2][0] = \
+        self.cube[4][0][2], self.cube[4][2][2], self.cube[4][2][0], self.cube[4][0][0]
+        self.cube[4][0][1], self.cube[4][1][2], self.cube[4][2][1], self.cube[4][1][0] = \
+        self.cube[4][1][2], self.cube[4][2][1], self.cube[4][1][0], self.cube[4][0][1] 
 
     def rotate_right_clockwise(self):
-        pass
+        row1, row2, row3, row4 = [row[2] for row in self.cube[2]], [row[0] for row in self.cube[1]], \
+            [row[2] for row in self.cube[3]], [row[2] for row in self.cube[0]]
+        row1.reverse()
+        row2.reverse()
+        for i in range(3):
+            self.cube[2][i][2] = row4[i]
+            self.cube[1][i][0] = row1[i]
+            self.cube[3][i][2] = row2[i]
+            self.cube[0][i][2] = row3[i]
+        self.cube[5][0][0], self.cube[5][0][2], self.cube[5][2][2], self.cube[5][2][0] = \
+        self.cube[5][2][0], self.cube[5][0][0], self.cube[5][0][2], self.cube[5][2][2]
+        self.cube[5][0][1], self.cube[5][1][2], self.cube[5][2][1], self.cube[5][1][0] = \
+        self.cube[5][1][0], self.cube[5][0][1], self.cube[5][1][2], self.cube[5][2][1] 
     
     def rotate_right_counterclockwise(self):
-        pass
+        row1, row2, row3, row4 = [row[2] for row in self.cube[2]], [row[0] for row in self.cube[1]], \
+            [row[2] for row in self.cube[3]], [row[2] for row in self.cube[0]]
+        row2.reverse()
+        row3.reverse()
+        for i in range(3):
+            self.cube[2][i][2] = row2[i]
+            self.cube[1][i][0] = row3[i]
+            self.cube[3][i][2] = row4[i]
+            self.cube[0][i][2] = row1[i]
+        self.cube[5][0][0], self.cube[5][0][2], self.cube[5][2][2], self.cube[5][2][0] = \
+        self.cube[5][0][2], self.cube[5][2][2], self.cube[5][2][0], self.cube[5][0][0]
+        self.cube[5][0][1], self.cube[5][1][2], self.cube[5][2][1], self.cube[5][1][0] = \
+        self.cube[5][1][2], self.cube[5][2][1], self.cube[5][1][0], self.cube[5][0][1] 
 
     # =================================================================
 
