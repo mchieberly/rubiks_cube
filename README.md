@@ -1,7 +1,11 @@
 # rubiks_cube
 AI to speedrun a Rubik's Cube solve
-Cube and AI code by Malachi Eberly, 3D Rendering code by Ezekiel Eberly
-Inspired by Code Bullet: https://www.youtube.com/watch?v=f9smvQ5fc7Q&t=587s
+
+Cube and AI code by Malachi Eberly
+3D Rendering code by Ezekiel Eberly
+
+Inspired by Code Bullet:
+https://www.youtube.com/watch?v=f9smvQ5fc7Q&t=587s
 
 To start the pipenv:
 pipenv shell
