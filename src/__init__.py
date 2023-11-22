@@ -1,5 +1,5 @@
 from gymnasium.envs.registration import register
-from src.cube.cube import CubeEnv
+from src.cube import CubeEnv
 
 register(
      id="RubiksCube-v0",
