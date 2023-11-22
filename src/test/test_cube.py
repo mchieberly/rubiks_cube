@@ -124,5 +124,39 @@ class TestCubeSolved(unittest.TestCase):
         self.cube.scramble()
         self.assertFalse(self.cube.is_solved())
 
+class TestCubeCheckpoints(unittest.TestCase):
+    def setUp(self):
+        self.cube = Cube()
+
+    def test_yellow_cross_formed(self):
+        self.assertTrue(self.cube.yellow_cross_formed())
+        self.cube.scramble()
+        self.assertFalse(self.cube.yellow_cross_formed())
+
+    def test_yellow_corners_solved(self):
+        self.assertTrue(self.cube.yellow_corners_solved())
+        self.cube.scramble()
+        self.assertFalse(self.cube.yellow_corners_solved())
+
+    def test_middle_layer_solved(self):
+        self.assertTrue(self.cube.middle_layer_solved())
+        self.cube.scramble()
+        self.assertFalse(self.cube.middle_layer_solved())
+
+    def test_white_cross_formed(self):
+        self.assertTrue(self.cube.white_cross_formed())
+        self.cube.scramble()
+        self.assertFalse(self.cube.white_cross_formed())
+
+    def test_white_face_formed(self):
+        self.assertTrue(self.cube.white_face_formed())
+        self.cube.scramble()
+        self.assertFalse(self.cube.white_face_formed())
+
+    def test_white_corners_oriented(self):
+        self.assertTrue(self.cube.white_corners_oriented())
+        self.cube.scramble()
+        self.assertFalse(self.cube.white_corners_oriented())
+        
 if __name__ == '__main__':
     unittest.main()
