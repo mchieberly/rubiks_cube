@@ -12,7 +12,7 @@ def main():
     model = PPO('MlpPolicy', env, verbose=1)
 
     # Train the agent
-    model.learn(total_timesteps=100)
+    model.learn(total_timesteps=100000)
 
     # Save the model
     model.save("ppo_rubikscube")
@@ -23,14 +23,21 @@ def main():
 def test_agent(env, model, num_tests=10):
     for test in range(num_tests):
         obs = env.reset()
-        done = False
         num_steps = 0
-        while not done:
+        rewards = 0
+        while True:       
+            obs = obs[0] if type(obs) == tuple else obs
             action, _states = model.predict(obs, deterministic=True)
-            obs, rewards, terminated, truncated, info = env.step(action)
+            action = int(action)
+            obs, reward, terminated, truncated, info = env.step(action)
             num_steps += 1
-            if done:
+            rewards += reward
+            if truncated:
                 print(f"Test {test + 1}: Solved in {num_steps} steps.")
+                env.render()
+                break
+            if terminated:
+                print(f"Ran out of all 150 moves, failed to solve. Reward: {rewards}")
                 env.render()
                 break
 
