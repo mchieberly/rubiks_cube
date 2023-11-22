@@ -28,8 +28,7 @@ def test_agent(env, model, num_tests=10):
         while True:       
             obs = obs[0] if type(obs) == tuple else obs
             action, _states = model.predict(obs, deterministic=True)
-            action = int(action)
-            obs, reward, terminated, truncated, info = env.step(action)
+            obs, reward, terminated, truncated, info = env.step(int(action))
             num_steps += 1
             rewards += reward
             if truncated:
