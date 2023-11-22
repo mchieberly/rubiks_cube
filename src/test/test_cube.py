@@ -3,7 +3,7 @@
 # python3 -m unittest src/test/test_cube.py
 
 import unittest
-from src.cube.cube import Cube
+from src.cube import Cube
 
 class TestCubeRotations(unittest.TestCase):
     def setUp(self):
