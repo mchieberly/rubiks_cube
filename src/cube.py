@@ -334,6 +334,18 @@ class Cube:
         edges = self.cube[0][2][1] == self.cube[0][1][1] and self.cube[1][2][1] == self.cube[1][1][1] and \
             self.cube[4][2][1] == self.cube[4][1][1] and self.cube[5][2][1] == self.cube[5][1][1]
         return face and edges
+    
+    def yellow_green_edge(self):
+         return self.cube[3][0][1] == self.cube[3][1][1] and self.cube[0][2][1] == self.cube[0][1][1]
+    
+    def yellow_blue_edge(self):
+        return self.cube[3][1][2] == self.cube[3][1][1] and self.cube[1][2][1] == self.cube[1][1][1]
+    
+    def yellow_orange_edge(self):
+        pass
+
+    def yellow_blue_edge(self):
+        pass
 
     def yellow_corners_solved(self):
         face = self.cube[3][0][0] == self.cube[3][0][2] == self.cube[3][2][0] == self.cube[3][2][2] == self.cube[3][1][1]
