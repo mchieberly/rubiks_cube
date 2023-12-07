@@ -245,21 +245,7 @@ class Cube:
 
     # RL Methods
 
-    def get_observation(self):
-        # Return the flattened state of the cube
-        return np.array(self.cube).flatten()
-
-    def step(self, action):
-        # Perform the action (rotation)
-        self.perform_rotation(action)
-
-        # Check to see if we've performed too many moves
-        terminated = self.num_turns >= 150
-
-        # Check if the cube is solved
-        truncated = self.is_solved()
-
-        # Define the reward
+    def _get_reward(self, truncated):
         if truncated:
             reward = 100
         else:
@@ -288,7 +274,25 @@ class Cube:
                                     if not self.white_corners_completed:
                                         reward += 30
                                         self.white_corners_completed = True
-        
+        return reward
+
+    def get_observation(self):
+        # Return the flattened state of the cube
+        return np.array(self.cube).flatten()
+
+    def step(self, action):
+        # Perform the action (rotation)
+        self.perform_rotation(action)
+
+        # Check to see if we've performed too many moves
+        terminated = self.num_turns >= 150
+
+        # Check if the cube is solved
+        truncated = self.is_solved()
+
+        # Define the reward
+        reward = self._get_reward(truncated)
+
         # Return observation, reward, and done status
         return self.get_observation(), reward, terminated, truncated, self.get_info()
 
