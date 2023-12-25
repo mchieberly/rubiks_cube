@@ -10,4 +10,4 @@ To run the AI agent:
 python -m src.cubeai
 
 To run the unit tests:
-python -m unittest src.test.test_cube.py
+python -m unittest src.test.test_cube
