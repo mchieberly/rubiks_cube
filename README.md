@@ -7,7 +7,7 @@ To start the pipenv:
 pipenv shell
 
 To run the AI agent:
-python3 -m src.cubeai
+python -m src.cubeai
 
 To run the unit tests:
-python3 -m unittest src.test.test_cube.py
+python -m unittest src.test.test_cube.py
