@@ -6,17 +6,13 @@ import gymnasium as gym
 from gymnasium import spaces
 import random
 
+from src.constants import SOLVED_CUBE
+
 class Cube:
 
     # Initialization
 
     def __init__(self):
-        self.solved_cube = [[[0, 0, 0], [0, 0, 0], [0, 0, 0]],
-                            [[1, 1, 1], [1, 1, 1], [1, 1, 1]], 
-                            [[2, 2, 2], [2, 2, 2], [2, 2, 2]],
-                            [[3, 3, 3], [3, 3, 3], [3, 3, 3]],
-                            [[4, 4, 4], [4, 4, 4], [4, 4, 4]],
-                            [[5, 5, 5], [5, 5, 5], [5, 5, 5]]]
         self.faces = {0 : 'Front', 1 : 'Back', 2 : 'Top', 3 : 'Bottom', 4 : 'Left', 5 : 'Right'}
         self.colors = {0 : 'green', 1 : 'blue', 2 : 'white', 3 : 'yellow', 4 : 'orange', 5 : 'red'}
         self.cube = [[[0, 0, 0], [0, 0, 0], [0, 0, 0]],
@@ -225,7 +221,7 @@ class Cube:
         self.white_corners_completed = False
 
     def is_solved(self):
-        if self.cube == self.solved_cube:
+        if self.cube == SOLVED_CUBE:
             return True
         return False
 
