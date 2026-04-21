@@ -1,7 +1,7 @@
 # Malachi Eberly
 # cubeai.py
 
-from src.cube import CubeEnv
+from rubiks_cube.cube import CubeEnv
 from stable_baselines3 import PPO
 
 def main():

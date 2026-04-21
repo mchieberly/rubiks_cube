@@ -1,0 +1,20 @@
+######################################################################
+# Malachi Eberly
+# Rubiks Cube AI
+# 
+# Project Configuration and Dependencies
+######################################################################f
+[project]
+name = "rubiks_cube"
+version = "0.1.0"
+description = "Solve Python Rubik's Cube with DDQN + HER"
+readme = "README.md"
+requires-python = ">=3.12.12"
+
+dependencies = [
+	"gymnasium",
+	"stable-baselines3[extra]",
+]
+
+[project.scripts]
+cubeai = "rubiks_cube.cubeai:main"

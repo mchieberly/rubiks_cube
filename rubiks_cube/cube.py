@@ -6,7 +6,7 @@ import gymnasium as gym
 from gymnasium import spaces
 import random
 
-from src.constants import SOLVED_CUBE
+from rubiks_cube.constants import SOLVED_CUBE
 
 class Cube:
 

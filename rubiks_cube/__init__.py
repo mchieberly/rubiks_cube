@@ -1,8 +1,8 @@
 from gymnasium.envs.registration import register
-from src.cube import CubeEnv
+from rubiks_cube.cube import CubeEnv
 
 register(
      id="RubiksCube-v0",
-     entry_point="src.ai:RubiksCubeEnv",
+     entry_point="rubiks_cube.ai:RubiksCubeEnv",
      max_episode_steps=150,
 )

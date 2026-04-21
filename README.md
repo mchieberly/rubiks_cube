@@ -1,4 +1,4 @@
-# rubiks_cube
+# Rubik's Cube
 AI to speedrun a Rubik's Cube solve
 
 Cube and AI code by Malachi Eberly
@@ -7,8 +7,27 @@ Cube and AI code by Malachi Eberly
 Inspired by Code Bullet:
 https://www.youtube.com/watch?v=f9smvQ5fc7Q&t=587s
 
+To install the project:
+```bash
+# Clone the project
+git clone git@github.com:mchieberly/rubiks_cube.git
+cd rubiks_cube
+
+# Initialize the virtual environment
+uv venv
+python -m ensurepip
+python -m pip install --upgrade pip
+
+# Install dependencies
+uv pip install -e .
+```
+
 To run the AI agent:
-python3 -m src.cubeai
+```bash
+cubeai
+```
 
 To run the unit tests:
-python3 -m unittest src.test.test_cube
+```bash
+python -m unittest rubiks_cube.test.test_cube
+```
