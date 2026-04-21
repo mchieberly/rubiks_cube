@@ -542,8 +542,9 @@ class Cube:
 
         return self.get_observation(), reward, terminated, truncated, self.get_info()
 
-    def reset(self):
-        self.scramble()
+    def reset(self, scramble_moves=25):
+        self.cube = [[row[:] for row in face] for face in SOLVED_CUBE]
+        self.scramble(moves=scramble_moves)
         self.num_turns = 0
         return self.get_observation()
 
@@ -641,7 +642,7 @@ class Cube:
 class CubeEnv(gym.Env):
     metadata = {"render_modes": ["human"], "render_fps": 4}
 
-    def __init__(self, render_mode=None):
+    def __init__(self, render_mode=None, scramble_moves=1):
         self.cube = Cube()
         self.action_space = gym.spaces.Discrete(12)
         sticker_space = gym.spaces.Box(low=0, high=5, shape=(54,), dtype=np.int64)
@@ -653,9 +654,13 @@ class CubeEnv(gym.Env):
             }
         )
         self._desired_goal = SOLVED_GOAL.copy()
+        self.scramble_moves = scramble_moves
 
         assert render_mode is None or render_mode in self.metadata["render_modes"]
         self.render_mode = render_mode
+
+    def set_scramble_moves(self, scramble_moves):
+        self.scramble_moves = int(scramble_moves)
 
     def _get_obs(self):
         state = np.asarray(self.cube.get_observation(), dtype=np.int64)
@@ -674,13 +679,14 @@ class CubeEnv(gym.Env):
         reward = float(
             self.compute_reward(obs["achieved_goal"], obs["desired_goal"], info)
         )
+        info["is_success"] = bool(terminated)
         if self.render_mode == "human":
             self._render_frame()
         return obs, reward, terminated, truncated, info
 
     def reset(self, seed=None, options=None):
         super().reset(seed=seed)
-        self.cube.reset()
+        self.cube.reset(scramble_moves=self.scramble_moves)
         if self.render_mode == "human":
             self._render_frame()
         return self._get_obs(), self._get_info()
