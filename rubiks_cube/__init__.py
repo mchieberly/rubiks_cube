@@ -1,5 +1,5 @@
 from gymnasium.envs.registration import register
-from rubiks_cube.cube import CubeEnv
+from rubiks_cube.cube import CubeEnv  # noqa
 
 register(
     id="RubiksCube-v0",

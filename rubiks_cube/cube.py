@@ -3,7 +3,6 @@
 
 import numpy as np
 import gymnasium as gym
-from gymnasium import spaces
 import random
 
 from rubiks_cube.constants import SOLVED_CUBE
@@ -674,8 +673,10 @@ class CubeEnv(gym.Env):
 
     def __init__(self, render_mode=None):
         self.cube = Cube()
-        self.action_space = spaces.Discrete(12)
-        self.observation_space = spaces.Box(low=0, high=5, shape=(54,), dtype=np.int64)
+        self.action_space = gym.spaces.Discrete(12)
+        self.observation_space = gym.spaces.Box(
+            low=0, high=5, shape=(54,), dtype=np.int64
+        )
 
         assert render_mode is None or render_mode in self.metadata["render_modes"]
         self.render_mode = render_mode

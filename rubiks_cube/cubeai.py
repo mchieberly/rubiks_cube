@@ -24,12 +24,11 @@ def main():
 
 def test_agent(env, model, num_tests=10):
     for test in range(num_tests):
-        obs = env.reset()
+        obs, _ = env.reset()
         num_steps = 0
         rewards = 0
         while True:
-            obs = obs[0] if type(obs) == tuple else obs
-            action, _states = model.predict(obs, deterministic=True)
+            action, _ = model.predict(obs, deterministic=True)
             obs, reward, terminated, truncated, info = env.step(int(action))
             num_steps += 1
             rewards += reward
