@@ -7,6 +7,8 @@ import random
 
 from rubiks_cube.constants import SOLVED_CUBE
 
+SOLVED_GOAL = np.array(SOLVED_CUBE, dtype=np.int64).flatten()
+
 
 class Cube:
     # Initialization
@@ -533,45 +535,11 @@ class Cube:
         # Perform the action (rotation)
         self.perform_rotation(action)
 
-        # Check to see if we've performed too many moves
-        terminated = self.num_turns >= 150
+        solved = self.is_solved()
+        terminated = solved
+        truncated = self.num_turns >= 150
+        reward = 0.0 if solved else -1.0
 
-        # Check if the cube is solved
-        truncated = self.is_solved()
-
-        # Define the reward
-        if truncated:
-            reward = 100
-        else:
-            reward = -1
-
-            # # Reward shaping = bad. Use HER instead
-            # if self.yellow_cross_formed():
-            #     if not self.yellow_cross_completed:
-            #         reward += 6
-            #         self.yellow_cross_completed = True
-            #     if self.yellow_corners_solved():
-            #         if not self.yellow_corners_completed:
-            #             reward += 10
-            #             self.yellow_corners_completed = True
-            #         if self.middle_layer_solved():
-            #             if not self.side_edges_completed:
-            #                 reward += 15
-            #                 self.side_edges_completed = True
-            #             if self.white_cross_formed():
-            #                 if not self.white_cross_completed:
-            #                     reward += 20
-            #                     self.white_cross_completed = True
-            #                 if self.white_face_formed():
-            #                     if not self.white_face_completed:
-            #                         reward += 25
-            #                         self.white_edges_completed = True
-            #                     if self.white_corners_oriented():
-            #                         if not self.white_corners_completed:
-            #                             reward += 30
-            #                             self.white_corners_completed = True
-
-        # Return observation, reward, and done status
         return self.get_observation(), reward, terminated, truncated, self.get_info()
 
     def reset(self):
@@ -676,30 +644,54 @@ class CubeEnv(gym.Env):
     def __init__(self, render_mode=None):
         self.cube = Cube()
         self.action_space = gym.spaces.Discrete(12)
-        self.observation_space = gym.spaces.Box(
-            low=0, high=5, shape=(54,), dtype=np.int64
+        sticker_space = gym.spaces.Box(low=0, high=5, shape=(54,), dtype=np.int64)
+        self.observation_space = gym.spaces.Dict(
+            {
+                "observation": sticker_space,
+                "achieved_goal": sticker_space,
+                "desired_goal": sticker_space,
+            }
         )
+        self._desired_goal = SOLVED_GOAL.copy()
 
         assert render_mode is None or render_mode in self.metadata["render_modes"]
         self.render_mode = render_mode
 
     def _get_obs(self):
-        return np.array(self.cube.get_observation())
+        state = np.asarray(self.cube.get_observation(), dtype=np.int64)
+        return {
+            "observation": state,
+            "achieved_goal": state.copy(),
+            "desired_goal": self._desired_goal.copy(),
+        }
 
     def _get_info(self):
         return self.cube.get_info()
 
     def step(self, action):
-        obs, reward, terminated, truncated, info = self.cube.step(action)
+        _, _, terminated, truncated, info = self.cube.step(action)
+        obs = self._get_obs()
+        reward = float(
+            self.compute_reward(obs["achieved_goal"], obs["desired_goal"], info)
+        )
         if self.render_mode == "human":
             self._render_frame()
         return obs, reward, terminated, truncated, info
 
     def reset(self, seed=None, options=None):
         super().reset(seed=seed)
+        self.cube.reset()
         if self.render_mode == "human":
             self._render_frame()
-        return self.cube.reset(), self._get_info()
+        return self._get_obs(), self._get_info()
+
+    def compute_reward(self, achieved_goal, desired_goal, info):
+        achieved = np.asarray(achieved_goal)
+        desired = np.asarray(desired_goal)
+        if achieved.ndim == 1:
+            return 0.0 if np.array_equal(achieved, desired) else -1.0
+        matches = np.all(achieved == desired, axis=-1)
+        return np.where(matches, 0.0, -1.0).astype(np.float32)
 
     def render(self, mode="human"):
         if mode == "human":
