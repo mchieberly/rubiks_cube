@@ -544,30 +544,32 @@ class Cube:
             reward = 100
         else:
             reward = -1
-            if self.yellow_cross_formed():
-                if not self.yellow_cross_completed:
-                    reward += 6
-                    self.yellow_cross_completed = True
-                if self.yellow_corners_solved():
-                    if not self.yellow_corners_completed:
-                        reward += 10
-                        self.yellow_corners_completed = True
-                    if self.middle_layer_solved():
-                        if not self.side_edges_completed:
-                            reward += 15
-                            self.side_edges_completed = True
-                        if self.white_cross_formed():
-                            if not self.white_cross_completed:
-                                reward += 20
-                                self.white_cross_completed = True
-                            if self.white_face_formed():
-                                if not self.white_face_completed:
-                                    reward += 25
-                                    self.white_edges_completed = True
-                                if self.white_corners_oriented():
-                                    if not self.white_corners_completed:
-                                        reward += 30
-                                        self.white_corners_completed = True
+
+            # # Reward shaping = bad. Use HER instead
+            # if self.yellow_cross_formed():
+            #     if not self.yellow_cross_completed:
+            #         reward += 6
+            #         self.yellow_cross_completed = True
+            #     if self.yellow_corners_solved():
+            #         if not self.yellow_corners_completed:
+            #             reward += 10
+            #             self.yellow_corners_completed = True
+            #         if self.middle_layer_solved():
+            #             if not self.side_edges_completed:
+            #                 reward += 15
+            #                 self.side_edges_completed = True
+            #             if self.white_cross_formed():
+            #                 if not self.white_cross_completed:
+            #                     reward += 20
+            #                     self.white_cross_completed = True
+            #                 if self.white_face_formed():
+            #                     if not self.white_face_completed:
+            #                         reward += 25
+            #                         self.white_edges_completed = True
+            #                     if self.white_corners_oriented():
+            #                         if not self.white_corners_completed:
+            #                             reward += 30
+            #                             self.white_corners_completed = True
 
         # Return observation, reward, and done status
         return self.get_observation(), reward, terminated, truncated, self.get_info()
