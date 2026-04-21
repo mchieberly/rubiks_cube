@@ -4,12 +4,13 @@
 from rubiks_cube.cube import CubeEnv
 from stable_baselines3 import PPO
 
+
 def main():
     # Create the environment
     env = CubeEnv()
 
     # Initialize the agent
-    model = PPO('MlpPolicy', env, verbose=1)
+    model = PPO("MlpPolicy", env, verbose=1)
 
     # Train the agent
     model.learn(total_timesteps=100000)
@@ -20,12 +21,13 @@ def main():
     # Testing the trained agent
     test_agent(env, model)
 
+
 def test_agent(env, model, num_tests=10):
     for test in range(num_tests):
         obs = env.reset()
         num_steps = 0
         rewards = 0
-        while True:       
+        while True:
             obs = obs[0] if type(obs) == tuple else obs
             action, _states = model.predict(obs, deterministic=True)
             obs, reward, terminated, truncated, info = env.step(int(action))
@@ -39,6 +41,7 @@ def test_agent(env, model, num_tests=10):
                 print(f"Ran out of all 150 moves, failed to solve. Reward: {rewards}")
                 env.render()
                 break
+
 
 if __name__ == "__main__":
     main()
